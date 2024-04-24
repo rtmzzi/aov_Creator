@@ -1,0 +1,29 @@
+### AOV CREATOR
+
+import maya.cmds as cmds
+import mtoa.aovs as aovs
+
+aovList = {'RGBA': 6, 'Z': 4, 'albedo': 5, 'coat': 5, 'crypto_material': 5, 'crypto_object': 5, 'diffuse': 5, 'direct': 5, 'emission': 5, 'indirect': 5, 'shadow_matte': 6, 'sheen': 5, 'specular': 5, 'sss': 5, 'transmission': 5}
+
+getAllAovs = aovs.AOVInterface().getAOVNodes(names=True)
+sceneAov = []
+
+for i in getAllAovs:
+    sceneAov.append(i[0])
+
+for k,v in aovList.items():
+    if(k not in sceneAov):
+        print("AOV: " + k + " criado")
+        aovs.AOVInterface().addAOV(k,v)
+    else:
+        print("já existe aov: " + k)
+
+for i in getAllAovs:
+    if(i[1] == "aiAOV_RGBA"):
+        cmds.setAttr(i[1] + ".lightGroups", 1)
+
+getAllAovsCreated = aovs.AOVInterface().getAOVNodes(names=True)
+
+for i in getAllAovsCreated:
+    if(i[1] == "aiAOV_RGBA"):
+        cmds.setAttr(i[1] + ".lightGroups", 1)
